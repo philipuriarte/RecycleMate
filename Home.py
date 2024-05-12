@@ -39,8 +39,6 @@ def main():
     with tab2:
         # Capture image option
         capture_image = st.camera_input("Capture Image")
-        if capture_image:
-            st.image(capture_image)
 
     # Generate recommendations button
     if upload_image or capture_image:

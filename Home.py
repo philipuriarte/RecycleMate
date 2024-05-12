@@ -19,11 +19,17 @@ def main():
     """
     )
 
-    # Upload image
+    # Upload image option
     uploaded_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 
     if uploaded_image:
         st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
+    # Capture image option
+    picture = st.camera_input("Take a picture")
+
+    if picture:
+        st.image(picture)
 
         
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 # Main function to run the Streamlit application
 def main():
@@ -32,14 +33,23 @@ def main():
 
     with tab1:
         # Upload image option
-        image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
-        if image:
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+        upload_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+        if upload_image:
+            st.image(upload_image, caption="Uploaded Image", use_column_width=True)
     with tab2:
         # Capture image option
-        image = st.camera_input("Capture Image")
-        if image:
-            st.image(image)
+        capture_image = st.camera_input("Capture Image")
+        if capture_image:
+            st.image(capture_image)
+
+    # Generate recommendations button
+    if upload_image or capture_image:
+        st.write("The item in the image is a: *insert item*")
+        if st.button("Generate Recommendations"):
+            with st.spinner('Generating Recommendations...'):
+                time.sleep(3)
+                st.text("*insert recommendations*")
+    
 
         
 if __name__ == "__main__":

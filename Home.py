@@ -5,7 +5,7 @@ import time
 def main():
     st.set_page_config(
         page_title="Home",
-        page_icon=":recycle:",
+        page_icon="./RecycleMateLogo.ico",
     )
 
     with st.sidebar:

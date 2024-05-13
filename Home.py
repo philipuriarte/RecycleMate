@@ -3,15 +3,22 @@ import time
 
 # Main function to run the Streamlit application
 def main():
+    icon = "./RecycleMateLogo.ico"
+
     st.set_page_config(
         page_title="Home",
-        page_icon="./RecycleMateLogo.ico",
+        page_icon=icon,
     )
 
     with st.sidebar:
-        st.title("RecycleMate :recycle:")
-
-    st.title("Welcome to RecycleMate! :recycle:")
+        col1, mid, col2 = st.columns([4,1,20])
+        
+        with col1:            
+            st.image(icon,width=60)
+        with col2:
+            st.title("RecycleMate")
+    
+    st.title("Welcome to RecycleMate!")
 
     st.markdown(
         """

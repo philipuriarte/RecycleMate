@@ -21,14 +21,7 @@ st.session_state.classes = model.names
 
 def detect(image):
      img = Image.open(image)
-     ts = datetime.timestamp(datetime.now())
-     imgpath = os.path.join('data/uploads', str(ts)+image.name)
-     outputpath = os.path.join(
-          'data/outputs', os.path.basename(imgpath))
-     with open(imgpath, mode="wb") as f:
-          f.write(image.getbuffer())
-          results = model(imgpath)
-          
+     results = model(img)     
      return results
 
 def main():

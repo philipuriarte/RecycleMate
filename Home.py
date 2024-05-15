@@ -14,17 +14,27 @@ sys.path.insert(0, current_dir)
 
 import Results 
 
-#configurations
+# Configurations
 modelPath = "models/model.pt"
 model = YOLO('models/model.pt')
 st.session_state.classes = model.names
 
 def detect(image):
+     """Detects recycling objects from images.
+
+     Args:
+         image: The uploaded/captured image_
+
+     Returns:
+         Detection results
+     """
      img = Image.open(image)
      ts = datetime.timestamp(datetime.now())
+     
      imgpath = os.path.join('data/uploads', str(ts)+image.name)
      outputpath = os.path.join(
           'data/outputs', os.path.basename(imgpath))
+     
      with open(imgpath, mode="wb") as f:
           f.write(image.getbuffer())
           results = model(imgpath)
@@ -32,8 +42,10 @@ def detect(image):
      return results
 
 def main():
+    # RecycleMate logo
     icon = "./RecycleMateLogo.ico"
 
+    # Page configuration
     st.set_page_config(
         page_title="Home",
         page_icon=icon,
@@ -67,8 +79,10 @@ def main():
             """
         )
 
+        # Upload/capture image tabs 
+        
         tab1, tab2 = st.tabs(["Upload Image", "Capture Image"])
-
+        
         with tab1:
             upload_image = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
             if upload_image:
@@ -78,9 +92,11 @@ def main():
             capture_image = st.camera_input("Capture Image")
             if capture_image:
                 st.session_state.captured_image = capture_image
-
+        
+        # Checks if user has uploaded or captured an image
         if upload_image or capture_image:
             if st.button("Generate Recommendations"):
+                # Runs if user clicks "Generate Recommendations"
                 with st.spinner('Generating Recommendations...'):
                     time.sleep(3)
                     
@@ -89,19 +105,19 @@ def main():
                     else:
                          img_files = capture_image
                     
-                    st.session_state.detection = detect(img_files)
-                    
+                    # Detects recycling objects from input image
+                    st.session_state.detection = detect(img_files) 
                     detections = sv.Detections.from_ultralytics(st.session_state.detection[0])
     
-                    # Generate dictionary of predictions
+                    # Generate dictionary of identified objects
                     labels = [
                          f"{st.session_state.classes[class_id]}"
                          for _, _, _, class_id, _, _
                          in detections
                     ]
                     
-                                        
-                    st.session_state.recommendations = labels
+                    # Makes a query of identified objects                  
+                    st.session_state.recommendations = list(set(labels))
                     st.session_state.page = 'results'
                     st.experimental_rerun()
 

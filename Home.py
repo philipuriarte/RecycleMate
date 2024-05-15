@@ -20,13 +20,15 @@ model = YOLO('models/model.pt')
 st.session_state.classes = model.names
 
 def detect(image):
-     """Detect recycling objects from images
-     """
      img = Image.open(image)
      ts = datetime.timestamp(datetime.now())
      imgpath = os.path.join('data/uploads', str(ts)+image.name)
+     outputpath = os.path.join(
+          'data/outputs', os.path.basename(imgpath))
      with open(imgpath, mode="wb") as f:
+          f.write(image.getbuffer())
           results = model(imgpath)
+          
      return results
 
 def main():
@@ -82,25 +84,24 @@ def main():
                 with st.spinner('Generating Recommendations...'):
                     time.sleep(3)
                     
-                    # Get input image
                     if upload_image:
-                         st.session_state.img_files = upload_image
+                         img_files = upload_image
                     else:
-                         st.session_state.img_files = capture_image
+                         img_files = capture_image
                     
-                    # Detect recycling objects from image
-                    st.session_state.detection = detect(st.session_state.img_files)
-                    st.session_state.detections = sv.Detections.from_ultralytics(st.session_state.detection[0])
+                    st.session_state.detection = detect(img_files)
+                    
+                    detections = sv.Detections.from_ultralytics(st.session_state.detection[0])
     
                     # Generate dictionary of predictions
-                    st.session_state.labels = [
+                    labels = [
                          f"{st.session_state.classes[class_id]}"
                          for _, _, _, class_id, _, _
-                         in st.session_state.detections
+                         in detections
                     ]
                     
-                    # Query detected recycling objects from image                      
-                    st.session_state.recommendations = st.session_state.labels
+                                        
+                    st.session_state.recommendations = labels
                     st.session_state.page = 'results'
                     st.experimental_rerun()
 

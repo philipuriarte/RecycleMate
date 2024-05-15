@@ -7,20 +7,22 @@ websites = [
     "https://craftbits.com/recycled-crafts/",
     "https://craftgossip.com/about-craftgossip/notes",
     "https://upcyclethat.com/organizational-hacks-for-students/",
-    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/"
-    "https://earth911.com/recycling-center-search-guides/?utm_source=earth911-header"
-    "https://howtodispose.info/recycle-aluminum-foil/"
-    "https://energytheory.com/how-to-recycle-plastic-at-home/#:~:text=How%20to%20Recycle%20Plastic%20Properly%20at%20Home%201,Garden%20Using%20Old%20Plastic%20Pipes%20...%20More%20items"
-    "https://www.instructables.com/projects"
-    "https://www.diycraftsy.com/recycling-ideas/"
-    "https://www.diybunker.com/68-diy-recycle-project-ideas-thatre-totally-genius/"
-    "https://petticoatjunktion.com/crafts/upcycled-aluminum-can-decor/"
-    "https://www.familyholiday.net/55-creative-bottle-cap-craft-ideas-diy-recycle-projects/#google_vignette"
-    "https://www.hellowonderful.co/post/10-creative-ways-to-recycle-cardboard-into-kids-crafts/"
-    "https://www.diyncrafts.com/27010/repurpose/35-brilliant-diy-repurposing-ideas-cardboard-boxes"
+    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/",
+    "https://earth911.com/recycling-center-search-guides/?utm_source=earth911-header",
+    "https://howtodispose.info/recycle-aluminum-foil/",
+    "https://energytheory.com/how-to-recycle-plastic-at-home/#:~:text=How%20to%20Recycle%20Plastic%20Properly%20at%20Home%201,Garden%20Using%20Old%20Plastic%20Pipes%20...%20More%20items",
+    "https://www.instructables.com/projects",
+    "https://www.diycraftsy.com/recycling-ideas/",
+    "https://www.diybunker.com/68-diy-recycle-project-ideas-thatre-totally-genius/",
+    "https://petticoatjunktion.com/crafts/upcycled-aluminum-can-decor/",
+    "https://www.familyholiday.net/55-creative-bottle-cap-craft-ideas-diy-recycle-projects/#google_vignette",
+    "https://www.hellowonderful.co/post/10-creative-ways-to-recycle-cardboard-into-kids-crafts/",
+    "https://www.diyncrafts.com/27010/repurpose/35-brilliant-diy-repurposing-ideas-cardboard-boxes",
     "https://www.diyncrafts.com/110523/decor/old-book-crafts-and-decorations"
 ]
-
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+}
 def fetch_links_from_website(url, query):
     try:
         response = requests.get(url)
@@ -116,7 +118,7 @@ def main():
         st.write("No recommendations to display. Please go back to the home page and try again.")
         if st.button("Back to Home"):
             st.session_state.page = 'home'
-            st.experimental_rerun()
+            st.rerun()
         return
 
     st.image(image="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png")

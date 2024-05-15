@@ -8,6 +8,7 @@ import cv2
 
 import Home
 
+# List of crafts websites
 websites = [
     "https://craftbits.com/recycled-crafts/",
     "https://craftgossip.com/about-craftgossip/notes",
@@ -28,7 +29,18 @@ websites = [
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
+
 def fetch_links_from_website(url, query):
+    """
+    Fetches links from a website that contain a specific query in their text.
+    
+    Args:
+        url (str): The URL of the website to fetch links from.
+        query (str): The query to search for in the link text.
+    
+    Returns:
+        list: A list of dictionaries containing the title and URL of the relevant links.
+    """
     try:
         response = requests.get(url)
         response.raise_for_status()  

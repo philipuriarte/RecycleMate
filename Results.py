@@ -2,6 +2,11 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import itertools
+from PIL import Image
+import supervision as sv
+import cv2
+
+import Home
 
 websites = [
     "https://craftbits.com/recycled-crafts/",
@@ -110,7 +115,6 @@ def display_recycling_projects(materials):
                         unsafe_allow_html=True
                     )
 
-
 def main():
     st.title("Results")
     
@@ -120,8 +124,6 @@ def main():
             st.session_state.page = 'home'
             st.rerun()
         return
-
-    st.image(image="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png")
      
     st.header("Detected objects:")
     st.write(", ".join(st.session_state.recommendations))

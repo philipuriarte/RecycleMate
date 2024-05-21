@@ -165,7 +165,7 @@ def main():
 
     if st.button("Back to Home"):
         st.session_state.page = 'home'
-        st.experimental_rerun()
+        st.rerun()
 
 if __name__ == "__main__":
     main()

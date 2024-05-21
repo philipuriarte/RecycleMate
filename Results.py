@@ -1,5 +1,6 @@
 import streamlit as st
-import requests
+import aiohttp
+import asyncio
 from bs4 import BeautifulSoup
 import itertools
 
@@ -26,7 +27,6 @@ websites = [
     "https://veryinformed.com/can-you-recycle-chip-bags/#:~:text=How%20Can%20I%20Reuse%20and%20Repurpose%20My%20Old,Baby%20Toys%20...%205%205.%20Party%20Decorations%20",
     "https://www.diyncrafts.com/16784/repurpose/35-impossibly-creative-projects-you-can-make-with-recycled-egg-cartons",
     "https://organisemyhouse.com/egg-carton-reuse/",
-    "https://organisemyhouse.com/egg-carton-reuse/",
     "https://www.upcycleart.info/crafts/glass-jars-recycled-decor-crafts/",
     "https://wonderfuldiy.com/recycled-mason-jar-lids/",
     "https://craftinvaders.co.uk/recycled-magazine-basket/",
@@ -46,11 +46,12 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
-def fetch_links_from_website(url, query):
+async def fetch_links_from_website(session, url, query):
     """
     Fetches links from a website that contain a specific query in their text.
     
     Args:
+        session (ClientSession): The aiohttp session to use for requests.
         url (str): The URL of the website to fetch links from.
         query (str): The query to search for in the link text.
     
@@ -58,78 +59,60 @@ def fetch_links_from_website(url, query):
         list: A list of dictionaries containing the title and URL of the relevant links.
     """
     try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'html.parser')
-        links = []
-        for a_tag in soup.find_all('a', href=True):
-            link_text = a_tag.text.strip().lower()
-            link_url = a_tag['href']
-            # filter out local/anchor links
-            if not link_url.startswith(('#', '/')):
-                if not link_url.startswith(('http://', 'https://')):
-                    link_url = construct_full_url(url, link_url)
-                if query.lower() in link_text:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            content = await response.text()
+            soup = BeautifulSoup(content, 'html.parser')
+            links = []
+            for a_tag in soup.find_all('a', href=True):
+                link_text = a_tag.text.strip().lower()
+                link_url = a_tag['href']
+                if query.lower() in link_text and not link_url.startswith(('#', '/')):
                     links.append({
                         'title': link_text,
                         'link': link_url
                     })
-        return links
-    except requests.exceptions.RequestException as e:
+            return links
+    except aiohttp.ClientError as e:
         print(f"Error fetching links from {url}: {e}")
-        return [] 
+        return []
 
-def construct_full_url(base_url, url):
-    """
-    Constructs the full URL from a base URL and a possibly relative URL.
-    
-    Args:
-        base_url (str): The base URL.
-        url (str): The possibly relative URL.
-    
-    Returns:
-        str: The full URL.
-    """
-    return requests.compat.urljoin(base_url, url)
+async def query_websites_async(materials):
+    async with aiohttp.ClientSession(headers=headers) as session:
+        tasks = []
+        results = {material: [] for material in materials}
 
-def query_websites(materials):
-    # Initialize results dictionary with empty lists for each material
-    results = {material: [] for material in materials}
-    found_projects = False
+        for website in websites:
+            for material in materials:
+                tasks.append(fetch_links_from_website(session, website, material))
 
-    # Combine materials and their synonyms
-    synonyms = {
-        "plastic cup": ["plastic cup", "disposable cup", "plastic container", "plastic drinkware", "recycled cups"]
-        # add more synonyms or materials if needed
-    }
-    material_terms = {material: synonyms.get(material, []) + [material] for material in materials}
+        responses = await asyncio.gather(*tasks)
+        
+        for material in materials:
+            for response in responses:
+                if response:
+                    results[material].extend(response)
 
-    for material, terms in material_terms.items():
-        for term in terms:
-            for website in websites:
-                links = fetch_links_from_website(website, term)
-                if links:
-                    found_projects = True
-                    results[material].extend(links)
+        # remove duplicate links and makes sure all materials have fetched links
+        for material in results:
+            unique_links = {link['link']: link for link in results[material]}.values()
+            results[material] = list(unique_links)
+            if not results[material]:
+                print(f"No links fetched for material: {material}")
 
-    # remove duplicate links and makes sure all materials have fetched links
-    for material in results:
-        unique_links = {link['link']: link for link in results[material]}.values()
-        results[material] = list(unique_links)
-        if not results[material]:
-            print(f"No links fetched for material: {material}")
-    
-    return results, found_projects
+        return results
 
 def display_recycling_projects(materials):
-    results, found_projects = query_websites(materials)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    results = loop.run_until_complete(query_websites_async(materials))
     
     for material in materials:
         st.subheader(f"Projects for {material}:")
         if results[material]:
             for result in results[material]:
                 st.markdown(
-                    f'<a href="{result["link"]}" target="_blank"><button>{result["title"]}</button></a>',
+                    f'<a href="{result["link"]}" target="_blank" style="display:inline-block;padding:6px 12px;margin:10px 0;background-color:#4CAF50;color:#fff;text-align:center;text-decoration:none;font-size:16px;border-radius:4px;cursor:pointer;">{result["title"]}</a>',
                     unsafe_allow_html=True
                 )
         else:
@@ -169,3 +152,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

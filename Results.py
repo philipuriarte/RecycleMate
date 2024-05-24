@@ -11,7 +11,6 @@ websites = [
     "https://craftbits.com/recycled-crafts/",
     "https://www.diycraftsy.com/recycling-ideas/",
     "https://petticoatjunktion.com/crafts/upcycled-aluminum-can-decor/",
-<<<<<<< HEAD
     "https://www.hellowonderful.co/post/10-creative-ways-to-recycle-cardboard-into-kids-crafts/",
     "https://www.diyncrafts.com/27010/repurpose/35-brilliant-diy-repurposing-ideas-cardboard-boxes",
     "https://www.diyncrafts.com/110523/decor/old-book-crafts-and-decorations",
@@ -22,9 +21,7 @@ websites = [
     "https://artsycraftsymom.com/recycled-crafts-for-kids/",
     "https://modpodgerocksblog.com/recycled-crafts-for-kids/",
     "https://artsycraftsymom.com/ways-to-reuse-plastic-bags/",
-    "https://artsycraftsymom.com/12-adorable-paper-plate-easter-crafts/"
-    
-     =======
+    "https://artsycraftsymom.com/12-adorable-paper-plate-easter-crafts/",
     "https://www.familyholiday.net/55-creative-bottle-cap-craft-ideas-diy-recycle-projects/#google_vignette",
     "https://www.diytomake.com/37-diy-ways-to-recycle-bottle-caps/#:~:text=20%20Smart%20Ways%20To%20Recycle%20Bottle%20Caps%20And,8.%20DIY%20Bottle%20Cap%20Basket%20...%20More%20items",
     "https://www.diyncrafts.com/17424/repurpose/50-jaw-dropping-ideas-for-upcycling-tin-cans-into-beautiful-household-items",
@@ -47,47 +44,43 @@ websites = [
     "https://get-green-now.com/reuse-styrofoam/",
     "https://simplelifeofalady.com/recycle-tires/#:~:text=20%20Amazing%20Ideas%20to%20Recycle%20Tires%201%201.,...%208%208.%20Toy%20storage%20...%20More%20items",
     "https://www.creativejewishmom.com/recycled-plastic-cup-crafts/"
-    >>>>>>> 50867bf8d74ccb47bd62b02eb27d15c45a96121e
 ]
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
-<<<<<<< HEAD
 def fetch_links_from_website(url, query):
-=======
-async def fetch_links_from_website(session, url, query):
-    """
-    Fetches links from a website that contain a specific query in their text.
-    
-    Args:
-        session (ClientSession): The aiohttp session to use for requests.
-        url (str): The URL of the website to fetch links from.
-        query (str): The query to search for in the link text.
-    
-    Returns:
-        list: A list of dictionaries containing the title and URL of the relevant links.
-    """
->>>>>>> 50867bf8d74ccb47bd62b02eb27d15c45a96121e
-    try:
-        async with session.get(url) as response:
-            response.raise_for_status()
-            content = await response.text()
-            soup = BeautifulSoup(content, 'html.parser')
-            links = []
-            for a_tag in soup.find_all('a', href=True):
-                link_text = a_tag.text.strip().lower()
-                link_url = a_tag['href']
-                if query.lower() in link_text and not link_url.startswith(('#', '/')):
-                    links.append({
-                        'title': link_text,
-                        'link': link_url
-                    })
-            return links
-    except aiohttp.ClientError as e:
-        print(f"Error fetching links from {url}: {e}")
-        return []
+    async def fetch_links_from_website(session, url, query):
+          """
+          Fetches links from a website that contain a specific query in their text.
+          
+          Args:
+               session (ClientSession): The aiohttp session to use for requests.
+               url (str): The URL of the website to fetch links from.
+               query (str): The query to search for in the link text.
+          
+          Returns:
+               list: A list of dictionaries containing the title and URL of the relevant links.
+          """
+          try:
+               async with session.get(url) as response:
+                    response.raise_for_status()
+                    content = await response.text()
+                    soup = BeautifulSoup(content, 'html.parser')
+                    links = []
+                    for a_tag in soup.find_all('a', href=True):
+                         link_text = a_tag.text.strip().lower()
+                         link_url = a_tag['href']
+                         if query.lower() in link_text and not link_url.startswith(('#', '/')):
+                              links.append({
+                              'title': link_text,
+                              'link': link_url
+                              })
+                    return links
+          except aiohttp.ClientError as e:
+               print(f"Error fetching links from {url}: {e}")
+               return []
 
 async def query_websites_async(materials):
     async with aiohttp.ClientSession(headers=headers) as session:

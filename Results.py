@@ -2,45 +2,32 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import itertools
-from PIL import Image
 import supervision as sv
-import cv2
 
-import Home
 
 # List of crafts websites
 websites = [
     "https://craftbits.com/recycled-crafts/",
-    "https://craftgossip.com/about-craftgossip/notes",
-    "https://upcyclethat.com/organizational-hacks-for-students/",
-    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/",
-    "https://earth911.com/recycling-center-search-guides/?utm_source=earth911-header",
-    "https://howtodispose.info/recycle-aluminum-foil/",
-    "https://energytheory.com/how-to-recycle-plastic-at-home/#:~:text=How%20to%20Recycle%20Plastic%20Properly%20at%20Home%201,Garden%20Using%20Old%20Plastic%20Pipes%20...%20More%20items",
-    "https://www.instructables.com/projects",
     "https://www.diycraftsy.com/recycling-ideas/",
-    "https://www.diybunker.com/68-diy-recycle-project-ideas-thatre-totally-genius/",
     "https://petticoatjunktion.com/crafts/upcycled-aluminum-can-decor/",
-    "https://www.familyholiday.net/55-creative-bottle-cap-craft-ideas-diy-recycle-projects/#google_vignette",
     "https://www.hellowonderful.co/post/10-creative-ways-to-recycle-cardboard-into-kids-crafts/",
     "https://www.diyncrafts.com/27010/repurpose/35-brilliant-diy-repurposing-ideas-cardboard-boxes",
-    "https://www.diyncrafts.com/110523/decor/old-book-crafts-and-decorations"
+    "https://www.diyncrafts.com/110523/decor/old-book-crafts-and-decorations",
+    "https://www.craftionary.net/",
+    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/",
+    "https://www.thecrafttrain.com/40-recycled-crafts-for-kids/",
+    "https://diycandy.com/easy-recycled-crafts/",
+    "https://artsycraftsymom.com/recycled-crafts-for-kids/",
+    "https://modpodgerocksblog.com/recycled-crafts-for-kids/",
+    "https://artsycraftsymom.com/ways-to-reuse-plastic-bags/",
+    "https://artsycraftsymom.com/12-adorable-paper-plate-easter-crafts/"
+    
 ]
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
 def fetch_links_from_website(url, query):
-    """
-    Fetches links from a website that contain a specific query in their text.
-    
-    Args:
-        url (str): The URL of the website to fetch links from.
-        query (str): The query to search for in the link text.
-    
-    Returns:
-        list: A list of dictionaries containing the title and URL of the relevant links.
-    """
     try:
         response = requests.get(url)
         response.raise_for_status()  

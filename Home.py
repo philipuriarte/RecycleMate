@@ -94,7 +94,7 @@ def main():
                     ]
                     
                                         
-                    st.session_state.recommendations = labels
+                    st.session_state.recommendations = list(set(labels))
                     st.session_state.page = 'results'
                     st.experimental_rerun()
 

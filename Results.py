@@ -2,27 +2,29 @@ import streamlit as st
 import aiohttp
 import asyncio
 from bs4 import BeautifulSoup
-import itertools
-from PIL import Image
 import supervision as sv
-import cv2
 
-import Home
 
 # List of crafts websites
 websites = [
     "https://craftprojectideas.com/diy-terrarium-with-recycled-cups/",
     "https://craftbits.com/recycled-crafts/",
-    "https://craftgossip.com/about-craftgossip/notes",
-    "https://upcyclethat.com/organizational-hacks-for-students/",
-    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/",
-    "https://earth911.com/recycling-center-search-guides/?utm_source=earth911-header",
-    "https://howtodispose.info/recycle-aluminum-foil/",
-    "https://energytheory.com/how-to-recycle-plastic-at-home/#:~:text=How%20to%20Recycle%20Plastic%20Properly%20at%20Home%201,Garden%20Using%20Old%20Plastic%20Pipes%20...%20More%20items",
-    "https://www.instructables.com/projects",
     "https://www.diycraftsy.com/recycling-ideas/",
-    "https://www.diybunker.com/68-diy-recycle-project-ideas-thatre-totally-genius/",
     "https://petticoatjunktion.com/crafts/upcycled-aluminum-can-decor/",
+<<<<<<< HEAD
+    "https://www.hellowonderful.co/post/10-creative-ways-to-recycle-cardboard-into-kids-crafts/",
+    "https://www.diyncrafts.com/27010/repurpose/35-brilliant-diy-repurposing-ideas-cardboard-boxes",
+    "https://www.diyncrafts.com/110523/decor/old-book-crafts-and-decorations",
+    "https://www.craftionary.net/",
+    "https://www.weareteachers.com/earth-day-crafts-classroom-activities/",
+    "https://www.thecrafttrain.com/40-recycled-crafts-for-kids/",
+    "https://diycandy.com/easy-recycled-crafts/",
+    "https://artsycraftsymom.com/recycled-crafts-for-kids/",
+    "https://modpodgerocksblog.com/recycled-crafts-for-kids/",
+    "https://artsycraftsymom.com/ways-to-reuse-plastic-bags/",
+    "https://artsycraftsymom.com/12-adorable-paper-plate-easter-crafts/"
+    
+     =======
     "https://www.familyholiday.net/55-creative-bottle-cap-craft-ideas-diy-recycle-projects/#google_vignette",
     "https://www.diytomake.com/37-diy-ways-to-recycle-bottle-caps/#:~:text=20%20Smart%20Ways%20To%20Recycle%20Bottle%20Caps%20And,8.%20DIY%20Bottle%20Cap%20Basket%20...%20More%20items",
     "https://www.diyncrafts.com/17424/repurpose/50-jaw-dropping-ideas-for-upcycling-tin-cans-into-beautiful-household-items",
@@ -45,12 +47,16 @@ websites = [
     "https://get-green-now.com/reuse-styrofoam/",
     "https://simplelifeofalady.com/recycle-tires/#:~:text=20%20Amazing%20Ideas%20to%20Recycle%20Tires%201%201.,...%208%208.%20Toy%20storage%20...%20More%20items",
     "https://www.creativejewishmom.com/recycled-plastic-cup-crafts/"
+    >>>>>>> 50867bf8d74ccb47bd62b02eb27d15c45a96121e
 ]
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
+<<<<<<< HEAD
+def fetch_links_from_website(url, query):
+=======
 async def fetch_links_from_website(session, url, query):
     """
     Fetches links from a website that contain a specific query in their text.
@@ -63,6 +69,7 @@ async def fetch_links_from_website(session, url, query):
     Returns:
         list: A list of dictionaries containing the title and URL of the relevant links.
     """
+>>>>>>> 50867bf8d74ccb47bd62b02eb27d15c45a96121e
     try:
         async with session.get(url) as response:
             response.raise_for_status()

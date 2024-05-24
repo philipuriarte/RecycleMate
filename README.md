@@ -29,7 +29,7 @@ It offers personalized recycling project recommendations to help users practice 
 
 ![User Manual 2](/readme-files/user-manual2.png?raw=true)
 
-3. **Generate Recommendations**: After uploading or capturing the image, click on the "Generate" button to initiate the analysis process.
+3. **Explore Recycling Projects**: Once the analysis is complete, RecycleMate will display a list of recommended recycling projects based on the identified materials in the image. Explore the list to find initiatives that interest you and contribute to a greener planet!
 
 ![User Manual 3](/readme-files/user-manual3.png?raw=true)
 

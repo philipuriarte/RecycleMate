@@ -50,37 +50,37 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
-def fetch_links_from_website(url, query):
-    async def fetch_links_from_website(session, url, query):
-          """
-          Fetches links from a website that contain a specific query in their text.
-          
-          Args:
-               session (ClientSession): The aiohttp session to use for requests.
-               url (str): The URL of the website to fetch links from.
-               query (str): The query to search for in the link text.
-          
-          Returns:
-               list: A list of dictionaries containing the title and URL of the relevant links.
-          """
-          try:
-               async with session.get(url) as response:
-                    response.raise_for_status()
-                    content = await response.text()
-                    soup = BeautifulSoup(content, 'html.parser')
-                    links = []
-                    for a_tag in soup.find_all('a', href=True):
-                         link_text = a_tag.text.strip().lower()
-                         link_url = a_tag['href']
-                         if query.lower() in link_text and not link_url.startswith(('#', '/')):
-                              links.append({
-                              'title': link_text,
-                              'link': link_url
-                              })
-                    return links
-          except aiohttp.ClientError as e:
-               print(f"Error fetching links from {url}: {e}")
-               return []
+
+async def fetch_links_from_website(session, url, query):
+     """
+     Fetches links from a website that contain a specific query in their text.
+     
+     Args:
+          session (ClientSession): The aiohttp session to use for requests.
+          url (str): The URL of the website to fetch links from.
+          query (str): The query to search for in the link text.
+     
+     Returns:
+          list: A list of dictionaries containing the title and URL of the relevant links.
+     """
+     try:
+          async with session.get(url) as response:
+               response.raise_for_status()
+               content = await response.text()
+               soup = BeautifulSoup(content, 'html.parser')
+               links = []
+               for a_tag in soup.find_all('a', href=True):
+                    link_text = a_tag.text.strip().lower()
+                    link_url = a_tag['href']
+                    if query.lower() in link_text and not link_url.startswith(('#', '/')):
+                         links.append({
+                         'title': link_text,
+                         'link': link_url
+                         })
+               return links
+     except aiohttp.ClientError as e:
+          print(f"Error fetching links from {url}: {e}")
+          return []
 
 async def query_websites_async(materials):
     async with aiohttp.ClientSession(headers=headers) as session:

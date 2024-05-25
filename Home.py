@@ -9,8 +9,6 @@ import torch
 from datetime import datetime
 import supervision as sv
 
-st.cache.clear()
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
